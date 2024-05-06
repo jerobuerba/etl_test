@@ -1,0 +1,10 @@
+google-cloud-bigquery==2.34.3
+google-auth
+pandas
+pyarrow==14.0.2
+datetime
+google-api-core
+Flask
+google-cloud-storage
+gunicorn==22.0.0
+Werkzeug==3.0.1

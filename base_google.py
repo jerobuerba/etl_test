@@ -12,9 +12,6 @@ GOOGLE_APPLICATION_CREDENTIALS = os.environ.get("sa_cred")
 
 class GoogleJobs:
     def __init__(self):
-        #self.google_credentials:  credentials = service_account.Credentials.from_service_account_file(GOOGLE_APPLICATION_CREDENTIALS)
-        #env = os.environ.get('environment', 'stg')
-        #self.project_id = 'peya-engineering' if env == 'pro' else 'peya-engineering-stg'
         try:
             self.google_credentials:  credentials = service_account.Credentials.from_service_account_file(GOOGLE_APPLICATION_CREDENTIALS)
         except Exception as e:
@@ -30,6 +27,7 @@ class GoogleJobs:
         bucket = gcs.get_bucket(bucket_name)
         blob = bucket.get_blob(file_name)
         #downloaded_file = blob.download_as_text(encoding="utf-8")
+        gcs.close()
         return blob
     
     def move_gcs_file(self,file_name, dest_folder,bucket_name = 'etl_pipeline_test'):
@@ -42,6 +40,7 @@ class GoogleJobs:
         generation_match_precondition = blob.generation
 
         blob.delete(if_generation_match=generation_match_precondition)
+        gcs.close()
         return "File moved"
 
     def get_bq_client(self) -> client:
@@ -58,7 +57,7 @@ class GoogleJobs:
             return bq_client
         except Exception as err:
             print(f"Error getting BigQuery client object, exception is {str(err)}")
-            return bigquery.Client(project=self.google_credentials.project_id if self.google_credentials else 'peya-engineering-stg')
+            raise
         
         
     def write_data_to_bq(self, df: pd, schema:list, destination_table, mode_insert: str = "WRITE_APPEND") -> None:
@@ -90,6 +89,7 @@ class GoogleJobs:
             # Read back the properties of the table
             table: Table = bq_client.get_table(table= dest_table)
             print("Job result - Table", table.project, table.dataset_id, table.table_id, "has", table.num_rows, "rows and", len(table.schema), "columns")
+            bq_client.close()
         except Exception as err:
             print(f"Error sending dataframe to BQ, exception is {str(err)}")
             raise

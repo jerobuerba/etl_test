@@ -4,6 +4,7 @@ import pandas as pd
 from base_google import GoogleJobs
 from parameters import params
 from tempfile import NamedTemporaryFile
+import os
 
 app = Flask(__name__)
 
@@ -18,9 +19,13 @@ def read_file(file_name):
     return df
 
 
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({'message': 'Service Available.'}), 200
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    file_name = request.form.get('file_name')
+    file_name = request.args.get('file_name')
     if file_name is None:
         return jsonify({'error': 'File name not sent'}), 400
     
@@ -39,9 +44,9 @@ def upload_file():
 
 @app.route('/quarterly_report', methods=['GET'])
 def quarterly_report():
-    year = request.form.get('year')
+    year = request.args.get('year')
     if year is None:
-        return jsonify({'error': 'File name not sent'}), 400
+        return jsonify({'error': 'Year not sent'}), 400
     query = f"""
         select department, job, coalesce(Q1,0) as Q1,coalesce(Q2,0) as Q2,coalesce(Q3,0) as Q3,coalesce(Q4,0) as Q4
         from (
@@ -61,9 +66,9 @@ def quarterly_report():
 
 @app.route('/departments_report', methods=['GET'])
 def departments_report():
-    year = request.form.get('year')
+    year = request.args.get('year')
     if year is None:
-        return jsonify({'error': 'File name not sent'}), 400
+        return jsonify({'error': 'Year not sent'}), 400
     query = f"""        
         with departments as
         ( select department_id as id, department,count(*) as hired
@@ -85,4 +90,4 @@ def departments_report():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT','8080')),debug=True)
