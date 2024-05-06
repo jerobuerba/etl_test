@@ -42,3 +42,6 @@ year= 2021
 I have implemented the API using Cloud Run service.
 I have push the docker image to Google's Artifact Registry and I have created a Cloud Run service using the uploaded image and setting up the env variables.
 
+
+<img width="924" alt="image" src="https://github.com/jerobuerba/etl_test/assets/54368942/566a3703-a533-405a-a075-77e0efad00ac">
+
