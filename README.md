@@ -12,7 +12,7 @@ Build the Docker image and run de container with the following command:
 - Quarterly Report
 - Departments Report
 
-## Upload File
+### Upload File
 
 **Example**
 
@@ -20,7 +20,7 @@ Build the Docker image and run de container with the following command:
 
 file_name: (department, hired_employees or jobs)
 
-## Quarterly Report
+### Quarterly Report
 
 **Example**
 
@@ -28,7 +28,7 @@ file_name: (department, hired_employees or jobs)
 
 year= 2021
 
-## Departments Report
+### Departments Report
 
 **Example**
 
