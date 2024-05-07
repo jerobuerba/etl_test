@@ -1,5 +1,8 @@
 # etl_test
 
+The files are uploaded to a Cloud Storage Bucket and, when the process of upload file runs, the process reads the file from the Bucket and then moves it to a "Processed" folder.
+The data is uploaded to a BigQuery table.
+
 ## Implementation (local env)
 You will need to create a GCP Service Account and sabe the .json file with the credentials.
 Build the Docker image and run de container with the following command:
